@@ -6,7 +6,8 @@ class Supplier(models.Model):
     Компания
     """
     name = models.CharField(max_length=150, verbose_name="Название компании")
-
+    provider = models.ForeignKey('self', on_delete=models.CASCADE, verbose_name="Компания", **NULLABLE)
+    level = models.IntegerField(verbose_name="Уровень поставщика", **NULLABLE)
     class Meta:
         verbose_name = "Компания"
         verbose_name_plural = "Компании"
