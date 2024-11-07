@@ -4,7 +4,7 @@ from rest_framework.routers import SimpleRouter
 from electronics.apps import ElectronicsConfig
 from electronics.views import SupplierCreateApiView, SupplierListApiView, SuppliernRetrieveAPIView, \
     SupplierUpdateAPIView, SupplierDestroyAPIView, ArrearsCreateApiView, ArrearsListApiView, ArrearsRetrieveAPIView, \
-    ArrearsDestroyAPIView, ContactsViewSet, ProductsViewSet
+    ArrearsDestroyAPIView, ContactsViewSet, ProductsViewSet, ArrearsUpdateAPIView
 
 app_name = ElectronicsConfig.name
 
@@ -24,7 +24,7 @@ urlpatterns = [
     path("arrears_create/", ArrearsCreateApiView.as_view(), name="arrears_create"),
     path("arrears/", ArrearsListApiView.as_view(), name="arrears"),
     path("arrears/<int:pk>/", ArrearsRetrieveAPIView.as_view(), name="arrears_pk"),
-    # path("electronics_update/<int:pk>/", SupplierUpdateAPIView.as_view(), name="electronics_update"),
+    path("electronics_update/<int:pk>/", ArrearsUpdateAPIView.as_view(), name="electronics_update"),
     path("arrears_delete/<int:pk>/", ArrearsDestroyAPIView.as_view(), name="arrears_delete"),
 ]
 

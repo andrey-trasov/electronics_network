@@ -2,7 +2,8 @@ from rest_framework.generics import CreateAPIView, ListAPIView, RetrieveAPIView,
 from rest_framework.viewsets import ModelViewSet
 
 from electronics.models import Supplier, Contacts, Arrears, Products
-from electronics.serializers import SupplierSerializers, ContactsSerializers, ArrearsSerializers, ProductsSerializers
+from electronics.serializers import SupplierSerializers, ContactsSerializers, ArrearsSerializers, ProductsSerializers, \
+    Arrears_updateSerializers
 
 
 # Компания
@@ -11,24 +12,23 @@ class SupplierCreateApiView(CreateAPIView):
     serializer_class = SupplierSerializers
 
     def perform_create(self, serializer):
-        level = 0
         provider = serializer.save()
         supplier = self.request.data
-        print(supplier)
-        if not supplier in ["provider"] and supplier != "null":
-            provider.level = level
+        #устанавливает уровень 0 если не указан поставщк
+        if not "provider" in supplier or supplier == None:
+            provider.level = 0
             provider.save()
+        #устанавливает уровень на 1 больше чем уровень поставщика
         else:
-
-            while True:
-                pass
-
-
-        # serializer.save()
+            company = Supplier.objects.filter(id=supplier["provider"]).first()
+            provider.level = company.level + 1
+            provider.save()
 
 class SupplierListApiView(ListAPIView):
     queryset = Supplier.objects.all()
     serializer_class = SupplierSerializers
+
+    filterset_fields = ('contacts__country',)  # фильтр
 
 
 class SuppliernRetrieveAPIView(RetrieveAPIView):
@@ -98,9 +98,9 @@ class ArrearsRetrieveAPIView(RetrieveAPIView):
     serializer_class = ArrearsSerializers
 
 
-# class ArrearsUpdateAPIView(UpdateAPIView):
-#     queryset = Arrears.objects.all()
-#     serializer_class = ArrearsSerializers
+class ArrearsUpdateAPIView(UpdateAPIView):
+    queryset = Arrears.objects.all()
+    serializer_class = Arrears_updateSerializers
 
 class ArrearsDestroyAPIView(DestroyAPIView):
    queryset = Arrears.objects.all()
